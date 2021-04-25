@@ -1,0 +1,54 @@
+clear;
+%璇诲彇鍘熷浘  
+im = imread('test1.JPG');   %璇诲浘                                     
+%杩欓噷闇?鍏堟妸缁欏畾鐨勫浘鐗囨敼鍙樻垚棰勮鐨勫ぇ灏忚寖鍥?杩樻病鍐?[A,B,C]=imfindcircles(im,[5,30]);
+imshow(im);
+hold on;
+plot(A(:,1),A(:,2),'.g');
+
+xmeans=mean(A(:,1));
+ymeans=mean(A(:,2));
+pc=[xmeans,ymeans];
+plot(xmeans,ymeans,'*b');
+%鎺ヤ笅鏉ラ?杩囪绠楄繖涓偣鍜屾墍鏈夌偣鐨勮窛绂伙紝鍙栬窛绂绘渶灏忕殑鐐逛负涓績鐐广?
+minimun=norm(pc-[A(1,1),A(1,2)]);
+for i=1:1:length(A)
+po=[A(i,1),A(i,2)];
+temp=norm(pc-po);
+
+if minimun>temp
+    minimun=temp;
+    minpoint=po;
+end
+end
+plot(minpoint(1),minpoint(2),'*r')
+%鎺ヤ笅鏉ュ啀鎵惧嚭涓庡叾璺濈鏈?皬鐨勫洓涓偣锛屽彲浠ヨ绔嬪潗鏍囪酱浜?for i=1:1:length(A)
+po=[A(i,1),A(i,2)];
+L(i)=norm(minpoint-po);
+end
+[t1,t2]=sort(L,'ascend');
+point=[A(t2(2:5),1),A(t2(2:5),2)];
+plot(point(:,1),point(:,2),'*b');
+v11=[point(1,1)-point(2,1),point(1,2)-point(2,2)];
+v12=[point(3,1)-point(4,1),point(3,2)-point(4,2)];
+v21=[point(1,1)-point(3,1),point(1,2)-point(3,2)];
+v22=[point(2,1)-point(4,1),point(2,2)-point(4,2)];
+v31=[point(1,1)-point(4,1),point(1,2)-point(4,2)];
+v32=[point(2,1)-point(3,1),point(2,2)-point(3,2)];
+f1=norm(v11.*v12);
+f2=norm(v21.*v22);
+f3=norm(v31.*v32);
+if f1==min([f1,f2,f3])
+    x_x=[point(1,1),point(2,1)];x_y=[point(1,2),point(2,2)];%鎵惧嚭浜嗙敤浜庡缓绔媥杞寸殑鐐圭殑妯珫鍧愭爣
+    y_x=[point(1,1),point(2,1)];y_y=[point(1,2),point(2,2)];%鎵惧嚭浜嗙敤浜庡缓绔媦杞寸殑鐐圭殑妯珫鍧愭爣
+end
+if f2==min([f1,f2,f3])
+    x_x=[point(1,1),point(3,1)];x_y=[point(1,2),point(3,2)];%鎵惧嚭浜嗙敤浜庡缓绔媥杞寸殑鐐圭殑妯珫鍧愭爣
+    y_x=[point(2,1),point(4,1)];y_y=[point(2,2),point(4,2)];%鎵惧嚭浜嗙敤浜庡缓绔媦杞寸殑鐐圭殑妯珫鍧愭爣
+end
+if f3==min([f1,f2,f3])
+    x_x=[point(1,1),point(4,1)];x_y=[point(1,2),point(4,2)];%鎵惧嚭浜嗙敤浜庡缓绔媥杞寸殑鐐圭殑妯珫鍧愭爣
+    y_x=[point(2,1),point(3,1)];y_y=[point(2,2),point(3,2)];%鎵惧嚭浜嗙敤浜庡缓绔媦杞寸殑鐐圭殑妯珫鍧愭爣
+end
+line(x_x,x_y,'color','k');
+line(y_x,y_y,'color','k');
